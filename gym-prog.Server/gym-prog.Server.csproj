@@ -24,6 +24,7 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\gym-prog.Data\gym-prog.Data.csproj" />
+    <ProjectReference Include="..\gym-prog.Logic\gym-prog.Logic.csproj" />
   </ItemGroup>
 
 </Project>

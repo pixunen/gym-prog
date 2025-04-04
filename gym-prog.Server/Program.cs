@@ -1,4 +1,6 @@
 using gym_prog.Data.Data;
+using gym_prog.Logic.Services.Implementations;
+using gym_prog.Logic.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,10 @@ builder.Services.AddSwaggerGen();
 #region Database
 builder.Services.AddDbContext<GymContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GymContext")));
+#endregion
+
+#region Servies
+builder.Services.AddTransient<IWorkoutService, WorkoutService>();
 #endregion
 
 var app = builder.Build();

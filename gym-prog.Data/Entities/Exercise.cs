@@ -7,7 +7,7 @@
         public required string Description { get; set; }
         public int Sets { get; set; }
         public int Reps { get; set; }
-        public required string WorkoutId { get; set; }
-        public required Workout Workout { get; set; }
+        public string? WorkoutId { get; set; }
+        public Workout? Workout { get; set; }
     }
 }

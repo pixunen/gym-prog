@@ -10,6 +10,17 @@ namespace gym_prog.Data.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Configure Workout entity
+            modelBuilder.Entity<Workout>()
+                .Property(w => w.Id)
+                .HasDefaultValueSql("NEWID()");
+
+            // Configure Exercise entity
+            modelBuilder.Entity<Exercise>()
+                .Property(e => e.Id)
+                .HasDefaultValueSql("NEWID()");
+
+            // Configure relationship
             modelBuilder.Entity<Workout>()
                 .HasMany(w => w.Exercises)
                 .WithOne(e => e.Workout)

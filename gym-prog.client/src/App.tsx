@@ -1,38 +1,44 @@
 import { useEffect, useState } from 'react';
-import './App.css';
 
-interface Forecast {
-    date: string;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string;
+interface Workout {
+    id: string,
+    name: string,
+    description: string,
+    date: string,
+    exercises: Exercise[]
+}
+
+type Exercise = {
+    id: string,
+    name: string,
+    description: string,
+    sets: number,
+    reps: number
 }
 
 function App() {
-    const [forecasts, setForecasts] = useState<Forecast[]>();
+    const [workouts, setWorkouts] = useState<Workout[]>();
 
     useEffect(() => {
-        populateWeatherData();
+        populateWorkouts();
     }, []);
 
-    const contents = forecasts === undefined
+    const contents = workouts === undefined
         ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
         : <table className="table table-striped" aria-labelledby="tableLabel">
             <thead>
                 <tr>
+                    <th>Name</th>
+                    <th>Description</th>
                     <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
                 </tr>
             </thead>
             <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
+                {workouts.map(workout =>
+                    <tr key={workout.id}>
+                        <td>{workout.name}</td>
+                        <td>{workout.description}</td>
+                        <td>{workout.date}</td>
                     </tr>
                 )}
             </tbody>
@@ -40,17 +46,17 @@ function App() {
 
     return (
         <div>
-            <h1 id="tableLabel">Weather forecast</h1>
+            <h1 className='text-red-500'>Workouts</h1>
             <p>This component demonstrates fetching data from the server.</p>
             {contents}
         </div>
     );
 
-    async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
+    async function populateWorkouts() {
+        const response = await fetch('api/workout');
         if (response.ok) {
             const data = await response.json();
-            setForecasts(data);
+            setWorkouts(data);
         }
     }
 }
