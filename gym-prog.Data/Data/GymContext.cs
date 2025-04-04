@@ -3,14 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace gym_prog.Data.Data
 {
-    public class GymContext : DbContext
+    public class GymContext(DbContextOptions<GymContext> options) : DbContext(options)
     {
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
-
-        public GymContext(DbContextOptions<GymContext> options) : base(options)
-        {
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -23,6 +23,7 @@
     <ProjectReference Include="..\gym-prog.client\gym-prog.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\gym-prog.Data\gym-prog.Data.csproj" />
   </ItemGroup>
 
 </Project>
