@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gym-prog.Data", "gym-prog.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gym-prog.Logic", "gym-prog.Logic\gym-prog.Logic.csproj", "{657117B3-EE44-4B57-A92D-6C6AAF026B01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gym-prog.Shared", "gym-prog.Shared\gym-prog.Shared.csproj", "{1490577B-6D6A-468C-849A-9FEFF4A6C857}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{657117B3-EE44-4B57-A92D-6C6AAF026B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{657117B3-EE44-4B57-A92D-6C6AAF026B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{657117B3-EE44-4B57-A92D-6C6AAF026B01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1490577B-6D6A-468C-849A-9FEFF4A6C857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1490577B-6D6A-468C-849A-9FEFF4A6C857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1490577B-6D6A-468C-849A-9FEFF4A6C857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1490577B-6D6A-468C-849A-9FEFF4A6C857}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

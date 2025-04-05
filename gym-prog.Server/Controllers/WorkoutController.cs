@@ -1,5 +1,5 @@
-using gym_prog.Data.Entities;
 using gym_prog.Logic.Services.Interfaces;
+using gym_prog.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace gym_prog.Server.Controllers
@@ -12,7 +12,7 @@ namespace gym_prog.Server.Controllers
         private readonly IWorkoutService _workoutService = workoutService;
 
         [HttpGet(Name = "GetWorkouts")]
-        public async Task<IEnumerable<Workout>> Get()
+        public async Task<IEnumerable<WorkoutDto>> Get()
         {
             _logger.LogInformation("Getting all workouts");
             return await _workoutService.GetAllWorkoutsAsync();

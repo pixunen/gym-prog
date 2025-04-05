@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\gym-prog.Data\gym-prog.Data.csproj" />
+    <ProjectReference Include="..\gym-prog.Shared\gym-prog.Shared.csproj" />
   </ItemGroup>
 
 </Project>
