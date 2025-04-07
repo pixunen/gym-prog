@@ -94,7 +94,8 @@ namespace gym_prog.Logic.Services.Implementations
                     Description = e.Description,
                     Sets = e.Sets,
                     Reps = e.Reps,
-                    WorkoutId = existingWorkout.Id
+                    WorkoutId = existingWorkout.Id,
+                    Workout = existingWorkout
                 })];
 
             await _context.SaveChangesAsync();

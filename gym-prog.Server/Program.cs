@@ -1,6 +1,7 @@
 using gym_prog.Data.Data;
 using gym_prog.Logic.Services.Implementations;
 using gym_prog.Logic.Services.Interfaces;
+using gym_prog.ML.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,11 @@ builder.Services.AddDbContext<GymContext>(options =>
 
 #region Servies
 builder.Services.AddTransient<IWorkoutService, WorkoutService>();
+
+var modelPath = Path.Combine(Environment.CurrentDirectory, "Data", "GymProgressionModel.zip");
+builder.Services.AddSingleton<DataPreparationService>();
+builder.Services.AddSingleton(new ModelTrainerService(modelPath));
+builder.Services.AddSingleton(new PredictionService(modelPath));
 #endregion
 
 var app = builder.Build();

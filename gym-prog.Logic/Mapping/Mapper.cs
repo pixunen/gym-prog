@@ -43,6 +43,7 @@ namespace gym_prog.Logic.Mapping
                     Description = entity.Description,
                     Sets = entity.Sets,
                     Reps = entity.Reps,
+                    Weight = entity.Weight,
                     WorkoutId = entity.WorkoutId ?? string.Empty
                 };
         }
@@ -87,6 +88,7 @@ namespace gym_prog.Logic.Mapping
                     Description = dto.Description,
                     Sets = dto.Sets,
                     Reps = dto.Reps,
+                    Weight = dto.Weight,
                     WorkoutId = dto.WorkoutId
                 };
         }

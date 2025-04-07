@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\gym-prog.Data\gym-prog.Data.csproj" />
+    <ProjectReference Include="..\gym-prog.Shared\gym-prog.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML" Version="4.0.2" />
+    <PackageReference Include="Microsoft.ML.FastTree" Version="4.0.2" />
+    <PackageReference Include="Microsoft.ML.OnnxConverter" Version="0.22.2" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.21.0" />
+    <PackageReference Include="Microsoft.ML.OnnxTransformer" Version="4.0.2" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>gym_prog.ML</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

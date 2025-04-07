@@ -25,6 +25,7 @@
     </ProjectReference>
     <ProjectReference Include="..\gym-prog.Data\gym-prog.Data.csproj" />
     <ProjectReference Include="..\gym-prog.Logic\gym-prog.Logic.csproj" />
+    <ProjectReference Include="..\gym-prog.ML\gym-prog.ML.csproj" />
   </ItemGroup>
 
 </Project>
