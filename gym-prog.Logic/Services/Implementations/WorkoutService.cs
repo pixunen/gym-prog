@@ -61,8 +61,8 @@ namespace gym_prog.Logic.Services.Implementations
             _context.Workouts.Add(workout);
             await _context.SaveChangesAsync();
 
-            // Convert back to DTO
-            return workout.ToDto();
+            // Convert back to DTO with a null check
+            return workout.ToDto() ?? throw new InvalidOperationException("Failed to convert entity to DTO");
         }
 
         public async Task<bool> UpdateWorkoutAsync(WorkoutDto workoutDto)

@@ -13,7 +13,8 @@ namespace gym_prog.ML.Services
             // Get all exercises
             var exercises = await _context.Exercises
                 .Include(e => e.Workout)
-                .OrderBy(e => e.Workout.Date)
+                .Where(e => e.Workout != null)  // Only include exercises with a workout
+                .OrderBy(e => e.Workout!.Date)  // Use null-forgiving operator since we've filtered
                 .ToListAsync();
 
             var features = new List<ExerciseFeature>();
@@ -36,6 +37,13 @@ namespace gym_prog.ML.Services
                 {
                     var current = exerciseList[i];
                     var previous = exerciseList[i - 1];
+
+                    // Both current and previous should have non-null Workout because of our filter above
+                    // But we'll add a safety check anyway
+                    if (current.Workout == null || previous.Workout == null)
+                    {
+                        continue;  // Skip this iteration if either workout is null
+                    }
 
                     var daysBetween = (current.Workout.Date - previous.Workout.Date).Days;
 

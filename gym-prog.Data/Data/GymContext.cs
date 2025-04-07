@@ -71,6 +71,7 @@ namespace gym_prog.Data.Data
                     Description = "Compound exercise targeting quads, hamstrings, and glutes",
                     Sets = 4,
                     Reps = 12,
+                    Weight = 60, // in kg
                     WorkoutId = workouts[0].Id
                 },
                 new Exercise
@@ -80,6 +81,7 @@ namespace gym_prog.Data.Data
                     Description = "Compound exercise for chest, shoulders, and triceps",
                     Sets = 3,
                     Reps = 10,
+                    Weight = 50, // in kg
                     WorkoutId = workouts[0].Id
                 },
                 new Exercise
@@ -89,6 +91,7 @@ namespace gym_prog.Data.Data
                     Description = "Full body compound exercise emphasizing posterior chain",
                     Sets = 4,
                     Reps = 8,
+                    Weight = 80, // in kg
                     WorkoutId = workouts[0].Id
                 },
                 
@@ -100,6 +103,7 @@ namespace gym_prog.Data.Data
                     Description = "Bodyweight exercise targeting back and biceps",
                     Sets = 3,
                     Reps = 8,
+                    Weight = 0, // bodyweight
                     WorkoutId = workouts[1].Id
                 },
                 new Exercise
@@ -109,6 +113,7 @@ namespace gym_prog.Data.Data
                     Description = "Overhead press targeting deltoids and triceps",
                     Sets = 3,
                     Reps = 12,
+                    Weight = 40, // in kg
                     WorkoutId = workouts[1].Id
                 },
                 new Exercise
@@ -118,6 +123,7 @@ namespace gym_prog.Data.Data
                     Description = "Isolation exercise for biceps",
                     Sets = 3,
                     Reps = 15,
+                    Weight = 15, // in kg
                     WorkoutId = workouts[1].Id
                 },
                 
@@ -129,6 +135,7 @@ namespace gym_prog.Data.Data
                     Description = "Machine-based compound leg exercise",
                     Sets = 4,
                     Reps = 12,
+                    Weight = 100, // in kg
                     WorkoutId = workouts[2].Id
                 },
                 new Exercise
@@ -138,6 +145,7 @@ namespace gym_prog.Data.Data
                     Description = "Targets hamstrings and lower back",
                     Sets = 3,
                     Reps = 10,
+                    Weight = 70, // in kg
                     WorkoutId = workouts[2].Id
                 },
                 new Exercise
@@ -147,6 +155,7 @@ namespace gym_prog.Data.Data
                     Description = "Isolation exercise for calf muscles",
                     Sets = 4,
                     Reps = 20,
+                    Weight = 30, // in kg
                     WorkoutId = workouts[2].Id
                 }
             };

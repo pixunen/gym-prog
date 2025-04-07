@@ -1,5 +1,4 @@
 using gym_prog.ML.Models;
-using Microsoft.ML;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 
@@ -8,13 +7,11 @@ namespace gym_prog.ML.Services
     public class PredictionService
     {
         private readonly string _modelPath;
-        private readonly MLContext _mlContext;
-        private readonly InferenceSession _session;
+        private readonly InferenceSession? _session;
 
         public PredictionService(string modelPath)
         {
             _modelPath = modelPath;
-            _mlContext = new MLContext();
 
             // Load the ONNX model
             var onnxModelPath = Path.ChangeExtension(_modelPath, ".onnx");
@@ -26,6 +23,12 @@ namespace gym_prog.ML.Services
 
         public ExercisePrediction Predict(ExerciseFeature input)
         {
+            // Check if session is null first
+            if (_session == null)
+            {
+                throw new InvalidOperationException("Model has not been trained or exported to ONNX format yet.");
+            }
+
             // Create input tensor
             var inputTensor = CreateInputTensor(input);
 
