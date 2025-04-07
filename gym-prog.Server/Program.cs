@@ -18,13 +18,14 @@ builder.Services.AddDbContext<GymContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GymContext")));
 #endregion
 
-#region Servies
+#region Services
 builder.Services.AddTransient<IWorkoutService, WorkoutService>();
 
+// Change ML services from Singleton to Scoped
 var modelPath = Path.Combine(Environment.CurrentDirectory, "Data", "GymProgressionModel.zip");
-builder.Services.AddSingleton<DataPreparationService>();
-builder.Services.AddSingleton(new ModelTrainerService(modelPath));
-builder.Services.AddSingleton(new PredictionService(modelPath));
+builder.Services.AddScoped<DataPreparationService>();
+builder.Services.AddScoped(provider => new ModelTrainerService(modelPath));
+builder.Services.AddScoped(provider => new PredictionService(modelPath));
 #endregion
 
 var app = builder.Build();

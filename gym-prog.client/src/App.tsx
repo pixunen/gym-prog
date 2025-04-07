@@ -1,6 +1,7 @@
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import WorkoutsList from './components/WorkoutsList';
 import AddWorkout from './components/AddWorkout';
+import WorkoutDashboard from './components/WorkoutDashboard';
 import Navbar from './components/Navbar';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<WorkoutsList />} />
                     <Route path="/add-workout" element={<AddWorkout />} />
+                    <Route path="/dashboard" element={<WorkoutDashboard />} />
                 </Routes>
             </div>
         </div>

@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
 namespace gym_prog.Data.Data
@@ -8,12 +8,12 @@ namespace gym_prog.Data.Data
     {
         public GymContext CreateDbContext(string[] args)
         {
-            string serverProjectPath = Path.GetFullPath(Path.Combine(
+            var serverProjectPath = Path.GetFullPath(Path.Combine(
                 Directory.GetCurrentDirectory(),
                 "..",
                 "gym-prog.Server"));
 
-            IConfigurationRoot configuration = new ConfigurationBuilder()
+            var configuration = new ConfigurationBuilder()
                 .SetBasePath(serverProjectPath)
                 .AddJsonFile("appsettings.json")
                 .Build();
