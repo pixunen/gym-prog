@@ -54,7 +54,7 @@ namespace gym_prog.ML.Services
             return prediction;
         }
 
-        private IReadOnlyCollection<NamedOnnxValue> CreateInputTensor(ExerciseFeature input)
+        private static IReadOnlyCollection<NamedOnnxValue> CreateInputTensor(ExerciseFeature input)
         {
             // Create input for ONNX model
             var inputFeatures = new List<float>

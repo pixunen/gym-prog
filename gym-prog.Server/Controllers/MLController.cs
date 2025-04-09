@@ -48,6 +48,26 @@ namespace gym_prog.Server.Controllers
             {
                 _logger.LogInformation("Making prediction for exercise: {ExerciseName}", input.ExerciseName);
 
+                // Check if the model exists before attempting prediction
+                var modelPath = Path.Combine(Environment.CurrentDirectory, "Data", "GymProgressionModel.zip");
+                var onnxModelPath = Path.ChangeExtension(modelPath, ".onnx");
+                bool modelExists = System.IO.File.Exists(onnxModelPath);
+
+                if (!modelExists)
+                {
+                    _logger.LogWarning("Model has not been trained yet. Using simple progression for {ExerciseName}", input.ExerciseName);
+
+                    // Return a fallback prediction with a flag indicating it's not from the model
+                    return Ok(new
+                    {
+                        PredictedSets = input.PreviousSets + 1,
+                        PredictedReps = input.PreviousReps + 2,
+                        PredictedWeight = input.UserStrengthLevel < 5 ? input.UserStrengthLevel + 2.5f : Math.Round(input.UserStrengthLevel * 1.05),
+                        IsModelPrediction = false,
+                        Message = "Model has not been trained yet. Using simple progression."
+                    });
+                }
+
                 // Handle edge cases with default values
                 if (input.PreviousSets <= 0)
                 {
@@ -75,20 +95,34 @@ namespace gym_prog.Server.Controllers
                 prediction.PredictedSets = Math.Min(Math.Max(1, prediction.PredictedSets), input.PreviousSets + 2);
                 prediction.PredictedReps = Math.Min(Math.Max(1, prediction.PredictedReps), input.PreviousReps + 5);
 
-                _logger.LogInformation("Prediction result: Sets={Sets}, Reps={Reps}",
-                    prediction.PredictedSets, prediction.PredictedReps);
+                // Calculate a recommended weight (simple 5% increase as the model doesn't predict weight)
+                var predictedWeight = input.UserStrengthLevel < 5 ?
+                    input.UserStrengthLevel + 2.5f :
+                    (float)Math.Round(input.UserStrengthLevel * 1.05);
 
-                return Ok(prediction);
+                _logger.LogInformation("Prediction result: Sets={Sets}, Reps={Reps}, Weight={Weight}",
+                    prediction.PredictedSets, prediction.PredictedReps, predictedWeight);
+
+                return Ok(new
+                {
+                    prediction.PredictedSets,
+                    prediction.PredictedReps,
+                    PredictedWeight = predictedWeight,
+                    IsModelPrediction = true
+                });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error making prediction");
 
                 // Provide a fallback prediction if the model fails
-                return Ok(new ExercisePrediction
+                return Ok(new
                 {
                     PredictedSets = input.PreviousSets + 1,
-                    PredictedReps = input.PreviousReps + 1
+                    PredictedReps = input.PreviousReps + 2,
+                    PredictedWeight = input.UserStrengthLevel < 5 ? input.UserStrengthLevel + 2.5f : Math.Round(input.UserStrengthLevel * 1.05),
+                    IsModelPrediction = false,
+                    Message = "Error making prediction. Using simple progression."
                 });
             }
         }

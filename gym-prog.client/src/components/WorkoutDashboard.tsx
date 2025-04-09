@@ -35,6 +35,15 @@ interface AIPrediction {
     exerciseName: string;
     predictedSets: number;
     predictedReps: number;
+    predictedWeight: number;
+    isModelPrediction: boolean;
+    message?: string;
+}
+
+interface ModelStatus {
+    modelTrained: boolean;
+    onnxExported: boolean;
+    lastTrainedUtc: string | null;
 }
 
 const WorkoutDashboard = () => {
@@ -45,11 +54,15 @@ const WorkoutDashboard = () => {
     const [uniqueExercises, setUniqueExercises] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [modelStatus, setModelStatus] = useState<ModelStatus | null>(null);
 
     // Fetch workouts data
     useEffect(() => {
         const fetchWorkouts = async () => {
             try {
+                // Fetch model status first
+                await fetchModelStatus();
+
                 const response = await fetch('api/workout');
                 if (!response.ok) {
                     throw new Error('Failed to fetch workouts');
@@ -97,6 +110,22 @@ const WorkoutDashboard = () => {
 
         fetchWorkouts();
     }, []);
+
+    // Fetch model status
+    const fetchModelStatus = async () => {
+        try {
+            const response = await fetch('api/ml/train-status');
+            if (!response.ok) {
+                throw new Error('Failed to fetch model status');
+            }
+            const data = await response.json();
+            setModelStatus(data);
+            return data;
+        } catch (err) {
+            console.error('Error fetching model status:', err);
+            return null;
+        }
+    };
 
     // Request prediction from the ML service
     const requestPrediction = async (exerciseName: string) => {
@@ -151,7 +180,10 @@ const WorkoutDashboard = () => {
                     {
                         exerciseName,
                         predictedSets: Math.round(prediction.predictedSets || latestExercise.sets + 1),
-                        predictedReps: Math.round(prediction.predictedReps || latestExercise.reps + 1)
+                        predictedReps: Math.round(prediction.predictedReps || latestExercise.reps + 1),
+                        predictedWeight: prediction.predictedWeight || Math.round(latestExercise.weight * 1.05), // 5% increase if no prediction
+                        isModelPrediction: prediction.isModelPrediction || false,
+                        message: prediction.message || ''
                     }
                 ];
             });
@@ -172,7 +204,10 @@ const WorkoutDashboard = () => {
                         {
                             exerciseName,
                             predictedSets: latest.sets + 1,
-                            predictedReps: latest.reps + 1
+                            predictedReps: latest.reps + 1,
+                            predictedWeight: Math.round(latest.weight * 1.05), // 5% increase
+                            isModelPrediction: false,
+                            message: 'Error getting prediction. Using simple progression.'
                         }
                     ];
                 });
@@ -226,6 +261,28 @@ const WorkoutDashboard = () => {
         window.location.href = '/add-workout';
     };
 
+    // Function to trigger manual model training
+    const triggerModelTraining = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch('api/ml/train', {
+                method: 'POST'
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to train model');
+            }
+
+            await fetchModelStatus();
+            alert('Model training completed successfully!');
+        } catch (err) {
+            console.error('Error training model:', err);
+            setError('Failed to train model. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
@@ -259,6 +316,29 @@ const WorkoutDashboard = () => {
                 </div>
             ) : (
                 <div className="space-y-8">
+                    {/* Model Status Card */}
+                    <div className="bg-white rounded-lg shadow-md p-6">
+                        <h3 className="text-lg font-medium text-gray-800 mb-4">AI Model Status</h3>
+                        <div className="flex flex-col md:flex-row justify-between items-center">
+                            <div className="mb-4 md:mb-0">
+                                <div className="flex items-center mb-2">
+                                    <div className={`h-3 w-3 rounded-full mr-2 ${modelStatus?.modelTrained ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                                    <p className="text-sm">Model trained: {modelStatus?.modelTrained ? 'Yes' : 'No'}</p>
+                                </div>
+                                {modelStatus?.lastTrainedUtc && (
+                                    <p className="text-xs text-gray-600">Last trained: {new Date(modelStatus.lastTrainedUtc).toLocaleString()}</p>
+                                )}
+                            </div>
+                            <button
+                                onClick={triggerModelTraining}
+                                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm"
+                                disabled={loading}
+                            >
+                                Train Model Now
+                            </button>
+                        </div>
+                    </div>
+
                     <div className="bg-white rounded-lg shadow-md p-6">
                         <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
                             <h2 className="text-xl font-semibold text-gray-800 mb-4 md:mb-0">Exercise Progress Tracker</h2>
@@ -364,9 +444,9 @@ const WorkoutDashboard = () => {
                             <h3 className="text-lg font-medium text-gray-800 mb-4">AI Recommendation</h3>
                             {currentPrediction ? (
                                 <div className="space-y-4">
-                                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                    <div className={`p-4 rounded-lg border ${currentPrediction.isModelPrediction ? 'bg-blue-50 border-blue-200' : 'bg-amber-50 border-amber-200'}`}>
                                         <p className="text-sm text-gray-700 mb-2">For your next <span className="font-medium">{selectedExercise}</span> session:</p>
-                                        <div className="flex justify-between mt-4">
+                                        <div className="grid grid-cols-3 gap-4 mt-4">
                                             <div className="text-center">
                                                 <p className="text-sm text-gray-600">Sets</p>
                                                 <p className="text-2xl font-bold text-blue-600">{currentPrediction.predictedSets}</p>
@@ -375,10 +455,23 @@ const WorkoutDashboard = () => {
                                                 <p className="text-sm text-gray-600">Reps</p>
                                                 <p className="text-2xl font-bold text-blue-600">{currentPrediction.predictedReps}</p>
                                             </div>
+                                            <div className="text-center">
+                                                <p className="text-sm text-gray-600">Weight</p>
+                                                <p className="text-2xl font-bold text-blue-600">{currentPrediction.predictedWeight} kg</p>
+                                            </div>
                                         </div>
+                                        {!currentPrediction.isModelPrediction && currentPrediction.message && (
+                                            <p className="text-xs text-amber-600 mt-2 text-center">
+                                                {currentPrediction.message}
+                                            </p>
+                                        )}
                                     </div>
                                     <div className="text-xs text-gray-500 mt-2">
-                                        <p>This recommendation is based on your previous performance and progress patterns.</p>
+                                        <p>
+                                            {currentPrediction.isModelPrediction
+                                                ? "This recommendation is based on AI analysis of your previous performance and progress patterns."
+                                                : "This is a basic progression suggestion. Train the model for more personalized recommendations."}
+                                        </p>
                                     </div>
                                 </div>
                             ) : (

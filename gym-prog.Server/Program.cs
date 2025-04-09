@@ -2,6 +2,7 @@ using gym_prog.Data.Data;
 using gym_prog.Logic.Services.Implementations;
 using gym_prog.Logic.Services.Interfaces;
 using gym_prog.ML.Services;
+using gym_prog.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,9 @@ var modelPath = Path.Combine(Environment.CurrentDirectory, "Data", "GymProgressi
 builder.Services.AddScoped<DataPreparationService>();
 builder.Services.AddScoped(provider => new ModelTrainerService(modelPath));
 builder.Services.AddScoped(provider => new PredictionService(modelPath));
+
+// Add background service for automatic training
+builder.Services.AddHostedService<BackgroundTrainingService>();
 #endregion
 
 var app = builder.Build();
@@ -49,5 +53,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
+
+// Ensure Data directory exists for model storage
+Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "Data"));
 
 app.Run();
