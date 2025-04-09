@@ -538,4 +538,7 @@ psd
 thumb
 sketch
 
-# End of https://www.toptal.com/developers/gitignore/api/csharp,aspnetcore,react
+# ML model files and data directory
+gym-prog.Server/Data/
+**/GymProgressionModel.zip
+**/GymProgressionModel.onnx

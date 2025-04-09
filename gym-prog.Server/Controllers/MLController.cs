@@ -51,7 +51,7 @@ namespace gym_prog.Server.Controllers
                 // Check if the model exists before attempting prediction
                 var modelPath = Path.Combine(Environment.CurrentDirectory, "Data", "GymProgressionModel.zip");
                 var onnxModelPath = Path.ChangeExtension(modelPath, ".onnx");
-                bool modelExists = System.IO.File.Exists(onnxModelPath);
+                var modelExists = System.IO.File.Exists(onnxModelPath);
 
                 if (!modelExists)
                 {
