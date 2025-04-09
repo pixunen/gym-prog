@@ -15,7 +15,7 @@ namespace gym_prog.ML.Models
         public float PreviousReps { get; set; }
 
         [LoadColumn(3)]
-        public float UserStrengthLevel { get; set; } // 1-5 scale
+        public float UserStrengthLevel { get; set; } // Using weight as a proxy for strength level
 
         [LoadColumn(4)]
         public float DaysSinceLastWorkout { get; set; }
@@ -24,10 +24,10 @@ namespace gym_prog.ML.Models
     // Prediction output
     public class ExercisePrediction
     {
-        [ColumnName("PredictedSets")]
+        [ColumnName("Score")]
         public float PredictedSets { get; set; }
 
-        [ColumnName("PredictedReps")]
+        // Not directly predicted by the model but calculated in the service
         public float PredictedReps { get; set; }
     }
 }
